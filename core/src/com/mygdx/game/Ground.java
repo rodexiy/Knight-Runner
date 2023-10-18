@@ -25,9 +25,10 @@ public class Ground {
         groundBodyDef = new BodyDef();
         groundBodyDef.position.set(new Vector2(0, 10));
         groundBody = world.createBody(groundBodyDef);
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;
 
         groundBox = new PolygonShape();
-        groundBox.setAsBox(camera.viewportWidth, 10.0f);
+        groundBox.setAsBox(camera.viewportWidth * 2, 10.0f);
 
         groundBody.createFixture(groundBox, 10.0f);
     }

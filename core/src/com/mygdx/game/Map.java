@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Map {
     private Game game;
-    private World world = new World(new Vector2(0, 0), true);
+    private World world = new World(new Vector2(0, -10), true);
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
     public World getWorld() {

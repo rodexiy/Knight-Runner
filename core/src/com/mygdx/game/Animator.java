@@ -55,12 +55,12 @@ public class Animator {
     public void render(float x, float y) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame = animationTrack.getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, x, y);
+        batch.draw(currentFrame, x - ((animationSheet.getWidth() / this.FRAME_COLS) / 2), y - ((animationSheet.getHeight() / this.FRAME_ROWS) / 2));
     }
     public void render(Vector2 position) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame = animationTrack.getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, position.x, position.y);
+        batch.draw(currentFrame, position.x - ((animationSheet.getWidth() / this.FRAME_COLS) / 2), position.y - ((animationSheet.getHeight() / this.FRAME_ROWS) / 2));
     }
 
 }
