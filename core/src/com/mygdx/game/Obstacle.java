@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.Public.ContactTypes;
 
 public class Obstacle {
     private Game game;
@@ -31,6 +32,7 @@ public class Obstacle {
         obstacleBodyDef.position.set(position);
         obstacleBodyDef.type = BodyDef.BodyType.DynamicBody;
         obstacleBody = world.createBody(obstacleBodyDef);
+        obstacleBody.setUserData(ContactTypes.OBSTACLE);
 
 
         obstacleBox = new PolygonShape();
@@ -40,9 +42,10 @@ public class Obstacle {
         fixtureDef.shape = obstacleBox;
         fixtureDef.density = 0f;
         fixtureDef.friction = 0f;
-        fixtureDef.restitution = 0f; // Make it bounce a little bit
+        fixtureDef.restitution = 0f;
 
         Fixture fixture = obstacleBody.createFixture(fixtureDef);
+        fixture.setUserData(ContactTypes.OBSTACLE);
 
         obstacleBody.createFixture(fixtureDef);
     }

@@ -31,8 +31,7 @@ public class Keyboard implements InputProcessor {
             if (character.getCanJump()) {
                 character.setCanJump(false);
                 Vector2 position = body.getPosition();
-                body.applyLinearImpulse(new Vector2(0, 100), position, true);
-
+                body.applyLinearImpulse(new Vector2(0, 1000), position, true);
             }
             pressed = true;
         }else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
@@ -46,7 +45,11 @@ public class Keyboard implements InputProcessor {
             pressed = true;
         }
 
-        body.setLinearVelocity(x * 100, body.getLinearVelocity().y);
+        if (pressed) {
+            body.setLinearVelocity(x * 100, body.getLinearVelocity().y);
+        }else {
+            body.setLinearVelocity(0, body.getLinearVelocity().y);
+        }
 
 
 

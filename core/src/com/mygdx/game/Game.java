@@ -25,6 +25,7 @@ public class Game extends ApplicationAdapter {
 	private Character character;
 	private Keyboard keyboard;
 	private Ground ground;
+	private Contacts contacts;
 	private ArrayList<Obstacle> obstacles = new ArrayList<>();
 
 	public Character getCharacter() {
@@ -49,10 +50,14 @@ public class Game extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		map = new Map(this);
 		world = map.getWorld();
+
 		debugRenderer = map.getDebugRenderer();
 		character = new Character(this);
 		keyboard = new Keyboard(this);
 		ground = new Ground(this, 50, 50);
+
+		contacts = new Contacts(this);
+		world.setContactListener(contacts);
 
 		Animator animation = new Animator(this, new Texture("monster.png"), 2, 1, 0.25f);
 
