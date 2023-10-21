@@ -75,13 +75,15 @@ public class Game extends ApplicationAdapter {
 
 		batch.begin();
 
-		for (Obstacle obstacle: obstacles) {
-			obstacle.render();
-		}
+
+		map.render();
+
+//		for (Obstacle obstacle: obstacles) {
+//			obstacle.render();
+//		}
 
 		keyboard.update();
 		camera.update();
-		map.render();
 		character.render();
 		batch.end();
 

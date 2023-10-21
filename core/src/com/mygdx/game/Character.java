@@ -18,7 +18,7 @@ public class Character {
     private Map map;
     private World world;
     private int Width = 10;
-    private int Height = 16;
+    private int Height = 30;
     private boolean canJump = true;
 
     public void setCanJump(boolean canJump) {
@@ -51,7 +51,7 @@ public class Character {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = box;
-        fixtureDef.friction = 0f;
+        fixtureDef.friction = 1f;
         fixtureDef.restitution = 0f;
         fixtureDef.density = 0f;
 
