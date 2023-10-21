@@ -1,10 +1,11 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Public.ContactTypes;
-import sun.management.Sensor;
 
 import javax.xml.soap.Text;
 // https://bhopkins.net/pages/mmphysics/
@@ -17,8 +18,8 @@ public class Character {
     private Fixture sensorFixture;
     private Map map;
     private World world;
-    private int Width = 10;
-    private int Height = 30;
+    private int Width = 30;
+    private int Height = 62;
     private boolean canJump = true;
 
     public void setCanJump(boolean canJump) {
@@ -37,7 +38,14 @@ public class Character {
         this.game = game;
         this.map = game.getMap();
         this.world = map.getWorld();
-        runAnimation = new Animator(game, new Texture("KnightRunning.png"),4, 1, 0.25f );
+        Pixmap pixmap200 = new Pixmap(Gdx.files.internal("KnightRunning.png"));
+        Pixmap pixmap100 = new Pixmap(400, 140, pixmap200.getFormat());
+        pixmap100.drawPixmap(pixmap200,
+                0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+        );
+        Texture runTexture = new Texture(pixmap100);
+        runAnimation = new Animator(game, runTexture,4, 1, 0.25f );
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
