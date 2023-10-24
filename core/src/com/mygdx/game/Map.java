@@ -15,8 +15,10 @@ public class Map {
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     private int backgroundTreesPosition = 0;
     private int backgroundMountainsPosition = 0;
+    private int backgroundCloudsPosition = 0;
     private Texture backgroundMountains;
     private Texture backgroundTrees;
+    private Texture backgroundClouds;
     private Batch batch;
 
     public World getWorld() {
@@ -33,43 +35,38 @@ public class Map {
     public Map(Game game) {
         this.game = game;
         this.batch = game.getBatch();
-        this.world = new World(new Vector2(0, -1), false);
+        this.world = new World(new Vector2(0, -100), false);
+        world.setContinuousPhysics(true);
 
-        Pixmap pixmap200 = new Pixmap(Gdx.files.internal("backgroundMountains.png"));
-        Pixmap pixmap100 = new Pixmap(Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight(), pixmap200.getFormat());
-        pixmap100.drawPixmap(pixmap200,
-                0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
-                0, 0, pixmap100.getWidth(), pixmap100.getHeight()
-        );
-        backgroundMountains = new Texture(pixmap100);
+        Rescaler rescaler = new Rescaler();
 
-        pixmap200.dispose();
-        pixmap100.dispose();
-
-        Pixmap pixmap2002 = new Pixmap(Gdx.files.internal("backgroundTrees.png"));
-        Pixmap pixmap1002 = new Pixmap(Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight(), pixmap2002.getFormat());
-        pixmap1002.drawPixmap(pixmap2002,
-                0, 0, pixmap2002.getWidth(), pixmap2002.getHeight(),
-                0, 0, pixmap1002.getWidth(), pixmap1002.getHeight()
-        );
-        backgroundTrees = new Texture(pixmap1002);
-        pixmap2002.dispose();
-        pixmap1002.dispose();
+        backgroundMountains = rescaler.ReScale("backgroundMountains.png", Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight());
+        backgroundTrees = rescaler.ReScale("backgroundTrees.png", Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight());
+        backgroundClouds = rescaler.ReScale("backgroundClouds.png", Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight());
     }
 
     public void render() {
+        world.step(Gdx.graphics.getDeltaTime() , 6, 2);
+
+
         batch.draw(backgroundMountains, backgroundMountainsPosition, 0);
         batch.draw(backgroundTrees, backgroundTreesPosition, 0);
+        batch.draw(backgroundClouds, backgroundCloudsPosition, 0);
 
         backgroundMountainsPosition -= 1;
         backgroundTreesPosition -= 3;
+        backgroundCloudsPosition -= 2;
+
         if (backgroundMountainsPosition <= -(backgroundMountains.getWidth() / 2)) {
             backgroundMountainsPosition = 0;
         }
+        if (backgroundCloudsPosition <= -(backgroundClouds.getWidth() / 2)) {
+            backgroundCloudsPosition = 0;
+        }
+
         if (backgroundTreesPosition <= -(backgroundTrees.getWidth() / 2)) {
             backgroundTreesPosition = 0;
         }
-        world.step(Gdx.graphics.getDeltaTime() + 1 , 10, 10);
     }
 
 }

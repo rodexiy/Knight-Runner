@@ -20,7 +20,16 @@ public class Character {
     private World world;
     private int Width = 30;
     private int Height = 62;
+    private int remainingJumpSteps = 0;
     private boolean canJump = true;
+
+    public void setRemainingJumpSteps(int remainingJumpSteps) {
+        this.remainingJumpSteps = remainingJumpSteps;
+    }
+
+    public void setGravityScale(int scale) {
+        this.body.setGravityScale(scale);
+    }
 
     public void setCanJump(boolean canJump) {
         this.canJump = canJump;
@@ -38,19 +47,17 @@ public class Character {
         this.game = game;
         this.map = game.getMap();
         this.world = map.getWorld();
-        Pixmap pixmap200 = new Pixmap(Gdx.files.internal("KnightRunning.png"));
-        Pixmap pixmap100 = new Pixmap(400, 140, pixmap200.getFormat());
-        pixmap100.drawPixmap(pixmap200,
-                0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
-                0, 0, pixmap100.getWidth(), pixmap100.getHeight()
-        );
-        Texture runTexture = new Texture(pixmap100);
+
+
+        Rescaler rescaler = new Rescaler();
+        Texture runTexture= rescaler.ReScale("KnightRunning.png", new Vector2(400, 140));
         runAnimation = new Animator(game, runTexture,4, 1, 0.25f );
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(100,100);
+        bodyDef.position.set(100, 100);
         bodyDef.allowSleep = false;
+        bodyDef.gravityScale = 2;
 
         this.body = world.createBody(bodyDef);
         body.setUserData(ContactTypes.CHARACTER);
@@ -59,40 +66,33 @@ public class Character {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = box;
-        fixtureDef.friction = 1f;
+        fixtureDef.friction = 0f;
         fixtureDef.restitution = 0f;
         fixtureDef.density = 0f;
-
 
         Fixture fixture = body.createFixture(fixtureDef);
         fixture.setUserData(ContactTypes.CHARACTER);
 
-        BodyDef floorSensorBodyDef = new BodyDef();
-        floorSensorBodyDef.type = BodyDef.BodyType.DynamicBody;
-        floorSensorBodyDef.position.set(100, 80);
 
-        this.floorSensor = world.createBody(floorSensorBodyDef);
-        floorSensor.setUserData(ContactTypes.FLOORSENSOR);
-        PolygonShape boxSensor = new PolygonShape();
-        boxSensor.setAsBox(Width,5);
-
-        FixtureDef floorSensorFixtureDef = new FixtureDef();
-        floorSensorFixtureDef.shape = boxSensor;
-        floorSensorFixtureDef.friction = 0f;
-        floorSensorFixtureDef.restitution = 0f;
-        floorSensorFixtureDef.density = 0f;
-        floorSensorFixtureDef.isSensor = true;
-        floorSensorBodyDef.allowSleep = false;
-
-        sensorFixture = floorSensor.createFixture(floorSensorFixtureDef);
-        sensorFixture.setUserData(ContactTypes.FLOORSENSOR);
         box.dispose();
-        boxSensor.dispose();
+    }
+
+    public void jump() {
+        setCanJump(false);
+        setRemainingJumpSteps(10);
     }
 
     public void render() {
         runAnimation.render(body.getPosition());
-        floorSensor.setTransform(body.getPosition().x, body.getPosition().y - Height - 5, 0);
+//        floorSensor.setTransform(body.getPosition().x, body.getPosition().y - Height - 5, 0);
+
+        if (remainingJumpSteps > 0) {
+            remainingJumpSteps--;
+            setGravityScale(0);
+            body.applyLinearImpulse(new Vector2(0.01f, 2000), body.getPosition(), true);
+        }else {
+            setGravityScale(10);
+        }
 
     }
 

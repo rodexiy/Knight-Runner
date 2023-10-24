@@ -21,13 +21,13 @@ public class Ground {
         this.camera = game.getCamera();
 
         groundBodyDef = new BodyDef();
-        groundBodyDef.position.set(new Vector2(0, 10));
+        groundBodyDef.position.set(new Vector2(game.V_WIDTH * 2, 0));
         groundBody = world.createBody(groundBodyDef);
         groundBody.setUserData(ContactTypes.GROUND);
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
 
         groundBox = new PolygonShape();
-        groundBox.setAsBox(camera.viewportWidth * 2, 10.0f);
+        groundBox.setAsBox(game.V_WIDTH * 5, 10.0f);
 
         Fixture groundFixture = groundBody.createFixture(groundBox, 10.0f);
         groundFixture.setUserData(ContactTypes.GROUND);

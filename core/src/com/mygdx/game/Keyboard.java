@@ -9,8 +9,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 
 public class Keyboard implements InputProcessor {
-    Character character;
-    Game game;
+    private Character character;
+    private Game game;
+
     public Keyboard(Game game) {
         this.game = game;
         this.character = game.getCharacter();
@@ -23,20 +24,12 @@ public class Keyboard implements InputProcessor {
         boolean upDownPressed = false;
         boolean leftRightPressed = false;
 
+
         float x = 0;
         float y = 0;
         Body body = character.getBody();
+        Vector2 characterPosition = body.getPosition();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            if (character.getCanJump()) {
-                character.setCanJump(false);
-                Vector2 position = body.getPosition();
-                body.applyLinearImpulse(new Vector2(0, 10000000), position, true);
-            }
-            pressed = true;
-        }else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             x = -1.0f;
             pressed = true;
@@ -46,13 +39,18 @@ public class Keyboard implements InputProcessor {
         }
 
         if (pressed) {
-            body.setLinearVelocity(x * 100, body.getLinearVelocity().y);
-        }else {
-            body.setLinearVelocity(0, body.getLinearVelocity().y);
+            float xAmount = ((x * 350) * Gdx.graphics.getDeltaTime());
+            System.out.println(xAmount);
+            body.setTransform((characterPosition.x + xAmount), characterPosition.y, 0);
         }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            if (character.getCanJump()) {
+                character.jump();
+            }
+        }else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
 
-
+        }
     }
 
     @Override
