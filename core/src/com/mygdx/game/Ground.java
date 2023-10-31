@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -21,13 +22,13 @@ public class Ground {
         this.camera = game.getCamera();
 
         groundBodyDef = new BodyDef();
-        groundBodyDef.position.set(new Vector2(game.V_WIDTH * 2, 0));
+        groundBodyDef.position.set(new Vector2(Gdx.graphics.getWidth() * 2, 0));
         groundBody = world.createBody(groundBodyDef);
         groundBody.setUserData(ContactTypes.GROUND);
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
 
         groundBox = new PolygonShape();
-        groundBox.setAsBox(game.V_WIDTH * 5, 10.0f);
+        groundBox.setAsBox(Gdx.graphics.getWidth() * 5, 1.0f);
 
         Fixture groundFixture = groundBody.createFixture(groundBox, 10.0f);
         groundFixture.setUserData(ContactTypes.GROUND);

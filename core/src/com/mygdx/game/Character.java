@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Public.ContactTypes;
 
+import static com.mygdx.game.Public.Constants.PPM;
+
 import javax.xml.soap.Text;
 // https://bhopkins.net/pages/mmphysics/
 public class Character {
@@ -18,8 +20,8 @@ public class Character {
     private Fixture sensorFixture;
     private Map map;
     private World world;
-    private int Width = 30;
-    private int Height = 62;
+    private float Width = 0.5f;
+    private int Height = 2;
     private int remainingJumpSteps = 0;
     private boolean canJump = true;
 
@@ -55,7 +57,7 @@ public class Character {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(100, 100);
+        bodyDef.position.set(5,0);
         bodyDef.allowSleep = false;
         bodyDef.gravityScale = 2;
 
@@ -83,15 +85,14 @@ public class Character {
     }
 
     public void render() {
-        runAnimation.render(body.getPosition());
-//        floorSensor.setTransform(body.getPosition().x, body.getPosition().y - Height - 5, 0);
+        runAnimation.render(body.getPosition().x * PPM, body.getPosition().y * PPM);
 
         if (remainingJumpSteps > 0) {
             remainingJumpSteps--;
             setGravityScale(0);
-            body.applyLinearImpulse(new Vector2(0.01f, 2000), body.getPosition(), true);
+            body.applyLinearImpulse(new Vector2(0f, 3), body.getPosition(), true);
         }else {
-            setGravityScale(10);
+            setGravityScale(15);
         }
 
     }

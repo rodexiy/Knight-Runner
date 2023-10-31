@@ -35,7 +35,7 @@ public class Map {
     public Map(Game game) {
         this.game = game;
         this.batch = game.getBatch();
-        this.world = new World(new Vector2(0, -100), false);
+        this.world = new World(new Vector2(0, -9), false);
         world.setContinuousPhysics(true);
 
         Rescaler rescaler = new Rescaler();

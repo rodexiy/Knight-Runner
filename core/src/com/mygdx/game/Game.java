@@ -8,16 +8,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kotcrab.vis.ui.widget.file.internal.IconStack;
+import com.sun.org.apache.xpath.internal.objects.XObject;
 
 import javax.print.attribute.standard.PagesPerMinute;
 import java.util.ArrayList;
+import static com.mygdx.game.Public.Constants.PPM;
 
 public class Game extends ApplicationAdapter {
 	private SpriteBatch batch;
@@ -30,9 +35,7 @@ public class Game extends ApplicationAdapter {
 	private Ground ground;
 	private Contacts contacts;
 	private ArrayList<Obstacle> obstacles = new ArrayList<>();
-	private FitViewport fitViewport;
-	public int V_WIDTH = 320;
-	public int V_HEIGHT = 180;
+
 
 
 	public Character getCharacter() {
@@ -54,8 +57,7 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
-//		camera.setToOrtho(false, 300, 400);
-		fitViewport = new FitViewport(V_WIDTH, V_HEIGHT, camera);
+		camera.position.set(new Vector3(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0));
 
 		batch = new SpriteBatch();
 		map = new Map(this);
@@ -69,12 +71,14 @@ public class Game extends ApplicationAdapter {
 		contacts = new Contacts(this);
 		world.setContactListener(contacts);
 
-		Animator animation = new Animator(this, new Texture("monster.png"), 2, 1, 0.25f);
+		Rescaler rescaler = new Rescaler();
+		Texture rescaledMonster = rescaler.ReScale("monster.png", 300, 100);
+		Animator animation = new Animator(this, rescaledMonster, 2, 1, 0.5f);
 
-//		for (int i = 0; i < 10; i++) {
-//			Obstacle obstacle = new Obstacle(this, animation, new Vector2(10, 20), new Vector2(Gdx.graphics.getWidth(), 50), new Vector2(-100, -100));
-//			obstacles.add(obstacle);
-//		}
+		for (int i = 0; i < 1; i++) {
+			Obstacle obstacle = new Obstacle(this, animation, new Vector2(1, 2), new Vector2(Gdx.graphics.getWidth() / PPM, 5), new Vector2(-15, -5));
+			obstacles.add(obstacle);
+		}
 
 	}
 
@@ -85,16 +89,23 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 		map.render();
 
-//		for (Obstacle obstacle: obstacles) {
-//			obstacle.render();
-//		}
+		for (int i = 0; i < obstacles.size(); i++) {
+			Obstacle obstacle = obstacles.get(i);
+
+			obstacle.render();
+			if (obstacle.getPosition().x < 0) {
+				obstacles.remove(i);
+				obstacle = null;
+				System.out.println(obstacle);
+			}
+		}
 
 		keyboard.update();
 		camera.update();
 		character.render();
 		batch.end();
 
-		debugRenderer.render(world, camera.combined);
+		debugRenderer.render(world, camera.combined.scl(PPM));
 	}
 	
 	@Override
@@ -105,7 +116,6 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		fitViewport.update(width, height);
 		camera.setToOrtho(false, width, height);
 	}
 }

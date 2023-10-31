@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-
+import static com.mygdx.game.Public.Constants.PPM;
 public class Keyboard implements InputProcessor {
     private Character character;
     private Game game;
@@ -39,9 +39,12 @@ public class Keyboard implements InputProcessor {
         }
 
         if (pressed) {
-            float xAmount = ((x * 350) * Gdx.graphics.getDeltaTime());
-            System.out.println(xAmount);
-            body.setTransform((characterPosition.x + xAmount), characterPosition.y, 0);
+            float xAmount = ((x * 5) * Gdx.graphics.getDeltaTime());
+//            System.out.println(xAmount);
+            body.setLinearVelocity(xAmount * 200, body.getLinearVelocity().y);
+//            body.setTransform((characterPosition.x + xAmount), characterPosition.y, 0);
+        }else{
+            body.setLinearVelocity(0, body.getLinearVelocity().y);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {

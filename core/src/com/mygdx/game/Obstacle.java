@@ -3,7 +3,10 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.kotcrab.vis.ui.widget.file.internal.IconStack;
 import com.mygdx.game.Public.ContactTypes;
+
+import static com.mygdx.game.Public.Constants.PPM;
 
 public class Obstacle {
     private Game game;
@@ -25,7 +28,6 @@ public class Obstacle {
         this.world = map.getWorld();
         this.animation = animation;
         this.size = size;
-        this.position = position;
         this.velocity = velocity;
 
         obstacleBodyDef = new BodyDef();
@@ -50,8 +52,14 @@ public class Obstacle {
         obstacleBody.createFixture(fixtureDef);
     }
 
+    public Vector2 getPosition() {
+        return this.obstacleBody.getPosition();
+    }
+
     public void render() {
-        animation.render(obstacleBody.getPosition());
+        System.out.println(obstacleBody.getPosition().x * PPM);
+
+        animation.render(obstacleBody.getPosition().x * PPM, obstacleBody.getPosition().y * PPM);
         obstacleBody.setLinearVelocity(velocity);
     }
 }

@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import static com.mygdx.game.Public.Constants.PPM;
+
 public class Animator {
     private Game game;
     private float stateTime = 0;
@@ -55,12 +57,14 @@ public class Animator {
     public void render(float x, float y) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame = animationTrack.getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, x - ((animationSheet.getWidth() / this.FRAME_COLS) / 2), y - ((animationSheet.getHeight() / this.FRAME_ROWS) / 2));
+        batch.draw(currentFrame, x - ((animationSheet.getWidth() / this.FRAME_COLS) / 2)
+                , y - ((animationSheet.getHeight() / this.FRAME_ROWS) / 2));
     }
     public void render(Vector2 position) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame = animationTrack.getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, position.x - ((animationSheet.getWidth() / this.FRAME_COLS) / 2), position.y - ((animationSheet.getHeight() / this.FRAME_ROWS) / 2));
+        batch.draw(currentFrame, position.x - ((animationSheet.getWidth() / this.FRAME_COLS) / 2)
+                , position.y - ((animationSheet.getHeight() / this.FRAME_ROWS) / 2));
     }
 
 }

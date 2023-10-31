@@ -33,6 +33,8 @@ public class Contacts implements ContactListener {
 
         if (aUserdata == ContactTypes.CHARACTER && bUserdata == ContactTypes.GROUND) {
             character.setCanJump(true);
+        }else if(aUserdata == ContactTypes.CHARACTER && bUserdata == ContactTypes.OBSTACLE) {
+            System.exit(0);
         }
     }
 
