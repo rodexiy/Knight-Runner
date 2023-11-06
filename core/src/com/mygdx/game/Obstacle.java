@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -20,6 +21,8 @@ public class Obstacle {
     private BodyDef obstacleBodyDef;
     private Body obstacleBody;
     private PolygonShape obstacleBox;
+    private Fixture fixture;
+    private boolean removing;
 
     //Animation, size, position, velocity
     public Obstacle(Game game, Animator animation, Vector2 size, Vector2 position, Vector2 velocity) {
@@ -46,18 +49,39 @@ public class Obstacle {
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 0f;
 
-        Fixture fixture = obstacleBody.createFixture(fixtureDef);
+        fixture = obstacleBody.createFixture(fixtureDef);
         fixture.setUserData(ContactTypes.OBSTACLE);
-
-        obstacleBody.createFixture(fixtureDef);
     }
 
     public Vector2 getPosition() {
         return this.obstacleBody.getPosition();
     }
 
+    public Fixture getFixture() { return this.fixture; }
+
+    public void remove() {
+        if (removing) { return; }
+        removing = true;
+        new Thread(new Runnable() {
+            public void run() {
+                while (world.isLocked()) {
+
+                }
+
+                world.destroyBody(obstacleBody);
+                animation = null;
+                fixture = null;
+                obstacleBodyDef = null;
+                obstacleBox = null;
+                velocity = null;
+                size = null;
+                position = null;
+            }
+        }).start();
+
+    }
+
     public void render() {
-        System.out.println(obstacleBody.getPosition().x * PPM);
 
         animation.render(obstacleBody.getPosition().x * PPM, obstacleBody.getPosition().y * PPM);
         obstacleBody.setLinearVelocity(velocity);

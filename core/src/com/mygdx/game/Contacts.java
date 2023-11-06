@@ -28,13 +28,14 @@ public class Contacts implements ContactListener {
         Object aUserdata = a.getUserData();
         Object bUserdata = b.getUserData();
 
-//        System.out.println(aUserdata);
-//        System.out.println(bUserdata);
-
         if (aUserdata == ContactTypes.CHARACTER && bUserdata == ContactTypes.GROUND) {
             character.setCanJump(true);
         }else if(aUserdata == ContactTypes.CHARACTER && bUserdata == ContactTypes.OBSTACLE) {
             System.exit(0);
+        }else if (aUserdata == ContactTypes.OBSTACLE && bUserdata == ContactTypes.WALLLEFT) {
+            game.removeObstacleByFixture(a);
+        }else if (aUserdata == ContactTypes.WALLLEFT && bUserdata == ContactTypes.OBSTACLE) {
+            game.removeObstacleByFixture(b);
         }
     }
 

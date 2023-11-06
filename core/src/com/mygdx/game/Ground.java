@@ -15,22 +15,22 @@ public class Ground {
     private PolygonShape groundBox;
     private OrthographicCamera camera;
 
-    public Ground(Game game, int x, int y) {
+    public Ground(Game game, int sizeX, int sizeY, int PosX, int PosY, Object ContactType) {
         this.game = game;
         this.map = game.getMap();
         this.world = map.getWorld();
         this.camera = game.getCamera();
 
         groundBodyDef = new BodyDef();
-        groundBodyDef.position.set(new Vector2(Gdx.graphics.getWidth() * 2, 0));
+        groundBodyDef.position.set(new Vector2(PosX, PosY));
         groundBody = world.createBody(groundBodyDef);
-        groundBody.setUserData(ContactTypes.GROUND);
+        groundBody.setUserData(ContactType);
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
 
         groundBox = new PolygonShape();
-        groundBox.setAsBox(Gdx.graphics.getWidth() * 5, 1.0f);
+        groundBox.setAsBox(sizeX, sizeY);
 
         Fixture groundFixture = groundBody.createFixture(groundBox, 10.0f);
-        groundFixture.setUserData(ContactTypes.GROUND);
+        groundFixture.setUserData(ContactType);
     }
 }
