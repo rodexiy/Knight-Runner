@@ -19,6 +19,7 @@ public class Map {
     private Texture backgroundMountains;
     private Texture backgroundTrees;
     private Texture backgroundClouds;
+    private Texture groundTexture;
     private Batch batch;
 
     public World getWorld() {
@@ -40,6 +41,7 @@ public class Map {
 
         Rescaler rescaler = new Rescaler();
 
+        groundTexture = rescaler.ReScale("ground.png", Gdx.graphics.getWidth() * 5, 32);
         backgroundMountains = rescaler.ReScale("backgroundMountains.png", Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight());
         backgroundTrees = rescaler.ReScale("backgroundTrees.png", Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight());
         backgroundClouds = rescaler.ReScale("backgroundClouds.png", Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight());
@@ -48,10 +50,10 @@ public class Map {
     public void render() {
         world.step(Gdx.graphics.getDeltaTime() , 6, 2);
 
-
         batch.draw(backgroundMountains, backgroundMountainsPosition, 0);
-        batch.draw(backgroundTrees, backgroundTreesPosition, 0);
+        batch.draw(backgroundTrees, backgroundTreesPosition, 32);
         batch.draw(backgroundClouds, backgroundCloudsPosition, 0);
+        batch.draw(groundTexture, 0, 0);
 
         backgroundMountainsPosition -= 1;
         backgroundTreesPosition -= 3;

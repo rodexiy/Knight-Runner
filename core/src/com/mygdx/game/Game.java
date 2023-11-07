@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -42,7 +44,9 @@ public class Game extends ApplicationAdapter {
 	private Random random = new Random();
 	private Rescaler rescaler;
 	private Animator animation;
-
+	private BitmapFont font;
+	private float pointsWait = 0;
+	private int points = 0;
 	private Double timeUntilNextObstacle;
 
 	public Character getCharacter() {
@@ -84,6 +88,11 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Montserrat.ttf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 25;
+		parameter.borderWidth = 3;
+		font = generator.generateFont(parameter);
 		rescaler = new Rescaler();
 		camera = new OrthographicCamera();
 		camera.position.set(new Vector3(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0));
@@ -115,11 +124,19 @@ public class Game extends ApplicationAdapter {
 
 		batch.begin();
 		map.render();
+		if (pointsWait >= 0.05) {
+			pointsWait = 0;
+			points += 1;
+		}else {
+			pointsWait += Gdx.graphics.getDeltaTime();
+		}
+
+		font.draw(batch, "Points: "+ Integer.toString(points), Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 50);
 
 		if (timeUntilNextObstacle <= 0) {
 			timeUntilNextObstacle = 1 + random.nextDouble() * (3 - 1);;
 
-			Obstacle obstacle = new Obstacle(this, animation, new Vector2(1, 2), new Vector2(Gdx.graphics.getWidth() / PPM, 5), new Vector2(-15, -5));
+			Obstacle obstacle = new Obstacle(this, animation, new Vector2(1, 1.5f), new Vector2(Gdx.graphics.getWidth() / PPM, 5), new Vector2(-15, -5));
 			obstacles.add(obstacle);
 		}else {
 			timeUntilNextObstacle -= Gdx.graphics.getDeltaTime();

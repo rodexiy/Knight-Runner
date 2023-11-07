@@ -31,7 +31,7 @@ public class Contacts implements ContactListener {
         if (aUserdata == ContactTypes.CHARACTER && bUserdata == ContactTypes.GROUND) {
             character.setCanJump(true);
         }else if(aUserdata == ContactTypes.CHARACTER && bUserdata == ContactTypes.OBSTACLE) {
-            System.exit(0);
+//            System.exit(0);
         }else if (aUserdata == ContactTypes.OBSTACLE && bUserdata == ContactTypes.WALLLEFT) {
             game.removeObstacleByFixture(a);
         }else if (aUserdata == ContactTypes.WALLLEFT && bUserdata == ContactTypes.OBSTACLE) {
