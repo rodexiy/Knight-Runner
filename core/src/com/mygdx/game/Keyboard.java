@@ -8,57 +8,65 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import static com.mygdx.game.Public.Constants.PPM;
+
+/**
+ * Classe responsável pelo processamento de entrada do teclado.
+ */
 public class Keyboard implements InputProcessor {
+
     private Character character;
     private Game game;
 
+    /**
+     * Construtor da classe Keyboard.
+     *
+     * @param game A instância do jogo.
+     */
     public Keyboard(Game game) {
         this.game = game;
         this.character = game.getCharacter();
-
     }
 
-
+    /**
+     * Atualiza o estado do teclado.
+     */
     public void update() {
         boolean pressed = false;
-        boolean upDownPressed = false;
-        boolean leftRightPressed = false;
 
+        if ((Gdx.input.isKeyPressed(Input.Keys.ENTER) && (game.getCurrentScreen().equals("StartMenu") || game.getCurrentScreen().equals("OverScreen")))) {
+            game.setCurrentScreen("Game");
+            return;
+        }
 
         float x = 0;
-        float y = 0;
         Body body = character.getBody();
-        Vector2 characterPosition = body.getPosition();
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             x = -1.0f;
             pressed = true;
-        }else if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             x = 1.0f;
             pressed = true;
         }
 
         if (pressed) {
             float xAmount = ((x * 5) * Gdx.graphics.getDeltaTime());
-//            System.out.println(xAmount);
             body.setLinearVelocity(xAmount * 200, body.getLinearVelocity().y);
-//            body.setTransform((characterPosition.x + xAmount), characterPosition.y, 0);
-        }else{
+        } else {
             body.setLinearVelocity(0, body.getLinearVelocity().y);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.SPACE))
+                && (game.getCurrentScreen().equals("Game"))
+        ) {
             if (character.getCanJump()) {
                 character.jump();
             }
-        }else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-
         }
     }
 
     @Override
     public boolean keyDown(int keycode) {
-
         return false;
     }
 
@@ -69,7 +77,7 @@ public class Keyboard implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        return  false;
+        return false;
     }
 
     @Override

@@ -9,7 +9,11 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 
+/**
+ * Representa o mapa do jogo.
+ */
 public class Map {
+
     private Game game;
     private World world;
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
@@ -22,17 +26,38 @@ public class Map {
     private Texture groundTexture;
     private Batch batch;
 
+    /**
+     * Obtém a instância do mundo do Box2D associado ao mapa.
+     *
+     * @return A instância do mundo.
+     */
     public World getWorld() {
         return world;
     }
+
+    /**
+     * Define o ouvinte de contatos para o mundo do Box2D associado ao mapa.
+     *
+     * @param contactListener O ouvinte de contatos a ser definido.
+     */
     public void setContactListener(ContactListener contactListener) {
         world.setContactListener(contactListener);
     }
 
+    /**
+     * Obtém o renderizador de debug do Box2D associado ao mapa.
+     *
+     * @return O renderizador de debug.
+     */
     public Box2DDebugRenderer getDebugRenderer() {
         return debugRenderer;
     }
 
+    /**
+     * Construtor da classe Map.
+     *
+     * @param game A instância do jogo.
+     */
     public Map(Game game) {
         this.game = game;
         this.batch = game.getBatch();
@@ -47,8 +72,11 @@ public class Map {
         backgroundClouds = rescaler.ReScale("backgroundClouds.png", Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight());
     }
 
+    /**
+     * Renderiza o mapa.
+     */
     public void render() {
-        world.step(Gdx.graphics.getDeltaTime() , 6, 2);
+        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
         batch.draw(backgroundMountains, backgroundMountainsPosition, 0);
         batch.draw(backgroundTrees, backgroundTreesPosition, 32);
@@ -70,5 +98,4 @@ public class Map {
             backgroundTreesPosition = 0;
         }
     }
-
 }

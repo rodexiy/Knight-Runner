@@ -10,8 +10,12 @@ import com.mygdx.game.Public.ContactTypes;
 import static com.mygdx.game.Public.Constants.PPM;
 
 import javax.xml.soap.Text;
-// https://bhopkins.net/pages/mmphysics/
+
+/**
+ * Representa o personagem jogável no jogo.
+ */
 public class Character {
+
     private Game game;
     private int health = 100;
     private Animator runAnimation;
@@ -25,46 +29,75 @@ public class Character {
     private int remainingJumpSteps = 0;
     private boolean canJump = true;
 
+    /**
+     * Define o número de etapas restantes do pulo.
+     *
+     * @param remainingJumpSteps O número de etapas restantes do pulo.
+     */
     public void setRemainingJumpSteps(int remainingJumpSteps) {
         this.remainingJumpSteps = remainingJumpSteps;
     }
 
+    /**
+     * Define a escala da gravidade para o personagem.
+     *
+     * @param scale A escala da gravidade.
+     */
     public void setGravityScale(int scale) {
         this.body.setGravityScale(scale);
     }
 
+    /**
+     * Define se o personagem pode pular.
+     *
+     * @param canJump True se o personagem pode pular, False caso contrário.
+     */
     public void setCanJump(boolean canJump) {
         this.canJump = canJump;
     }
 
+    /**
+     * Verifica se o personagem pode pular.
+     *
+     * @return True se o personagem pode pular, False caso contrário.
+     */
     public boolean getCanJump() {
         return this.canJump;
     }
 
+    /**
+     * Obtém o corpo físico do personagem.
+     *
+     * @return O corpo físico do personagem.
+     */
     public Body getBody() {
         return body;
     }
 
+    /**
+     * Construtor da classe Character.
+     *
+     * @param game A instância do jogo.
+     */
     public Character(Game game) {
         this.game = game;
         this.map = game.getMap();
         this.world = map.getWorld();
 
-
         Rescaler rescaler = new Rescaler();
-        Texture runTexture= rescaler.ReScale("KnightRunning.png", new Vector2(400, 140));
-        runAnimation = new Animator(game, runTexture,4, 1, 0.25f );
+        Texture runTexture = rescaler.ReScale("KnightRunning.png", new Vector2(400, 140));
+        runAnimation = new Animator(game, runTexture, 4, 1, 0.25f);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(5,0);
+        bodyDef.position.set(5, 0);
         bodyDef.allowSleep = false;
         bodyDef.gravityScale = 2;
 
         this.body = world.createBody(bodyDef);
         body.setUserData(ContactTypes.CHARACTER);
         PolygonShape box = new PolygonShape();
-        box.setAsBox(Width,Height);
+        box.setAsBox(Width, Height);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = box;
@@ -73,17 +106,23 @@ public class Character {
         fixtureDef.density = 0f;
 
         Fixture fixture = body.createFixture(fixtureDef);
+        body.setUserData(ContactTypes.CHARACTER);
         fixture.setUserData(ContactTypes.CHARACTER);
-
 
         box.dispose();
     }
 
+    /**
+     * Inicia o pulo do personagem.
+     */
     public void jump() {
         setCanJump(false);
         setRemainingJumpSteps(10);
     }
 
+    /**
+     * Renderiza o personagem na tela, atualizando a animação e aplicando a lógica do pulo.
+     */
     public void render() {
         runAnimation.render(body.getPosition().x * PPM, body.getPosition().y * PPM);
 
@@ -91,11 +130,8 @@ public class Character {
             remainingJumpSteps--;
             setGravityScale(0);
             body.applyLinearImpulse(new Vector2(0f, 3), body.getPosition(), true);
-        }else {
+        } else {
             setGravityScale(15);
         }
-
     }
-
-
 }

@@ -9,6 +9,9 @@ import com.mygdx.game.Public.ContactTypes;
 
 import static com.mygdx.game.Public.Constants.PPM;
 
+/**
+ * Representa um obstáculo no jogo.
+ */
 public class Obstacle {
     private Game game;
     private Map map;
@@ -24,7 +27,15 @@ public class Obstacle {
     private Fixture fixture;
     private boolean removing;
 
-    //Animation, size, position, velocity
+    /**
+     * Construtor da classe Obstacle.
+     *
+     * @param game      A instância do jogo.
+     * @param animation A animação do obstáculo.
+     * @param size      O tamanho do obstáculo.
+     * @param position  A posição inicial do obstáculo.
+     * @param velocity  A velocidade do obstáculo.
+     */
     public Obstacle(Game game, Animator animation, Vector2 size, Vector2 position, Vector2 velocity) {
         this.game = game;
         this.map = game.getMap();
@@ -39,7 +50,6 @@ public class Obstacle {
         obstacleBody = world.createBody(obstacleBodyDef);
         obstacleBody.setUserData(ContactTypes.OBSTACLE);
 
-
         obstacleBox = new PolygonShape();
         obstacleBox.setAsBox(size.x, size.y);
 
@@ -50,17 +60,35 @@ public class Obstacle {
         fixtureDef.restitution = 0f;
 
         fixture = obstacleBody.createFixture(fixtureDef);
+        obstacleBody.setUserData(ContactTypes.OBSTACLE);
         fixture.setUserData(ContactTypes.OBSTACLE);
     }
 
+    /**
+     * Obtém a posição do obstáculo.
+     *
+     * @return A posição do obstáculo.
+     */
     public Vector2 getPosition() {
         return this.obstacleBody.getPosition();
     }
 
-    public Fixture getFixture() { return this.fixture; }
+    /**
+     * Obtém o fixture associado ao obstáculo.
+     *
+     * @return O fixture do obstáculo.
+     */
+    public Fixture getFixture() {
+        return this.fixture;
+    }
 
+    /**
+     * Remove o obstáculo do mundo.
+     */
     public void remove() {
-        if (removing) { return; }
+        if (removing) {
+            return;
+        }
         removing = true;
         new Thread(new Runnable() {
             public void run() {
@@ -78,11 +106,12 @@ public class Obstacle {
                 position = null;
             }
         }).start();
-
     }
 
+    /**
+     * Renderiza o obstáculo.
+     */
     public void render() {
-
         animation.render(obstacleBody.getPosition().x * PPM, obstacleBody.getPosition().y * PPM);
         obstacleBody.setLinearVelocity(velocity);
     }
