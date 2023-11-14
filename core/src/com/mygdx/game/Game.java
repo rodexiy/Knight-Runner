@@ -203,9 +203,9 @@ public class Game extends ApplicationAdapter {
 			font.draw(batch, "Points: " + Integer.toString(points), Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 50);
 
 			if (timeUntilNextObstacle <= 0) {
-				timeUntilNextObstacle = 1 + random.nextDouble() * (3 - 1);
+				timeUntilNextObstacle = 0.5f + random.nextDouble() * (1.5f - 0.5f);
 
-				Obstacle obstacle = new Obstacle(this, animation, new Vector2(1, 1.5f), new Vector2(Gdx.graphics.getWidth() / PPM, 5), new Vector2(-15, -5));
+				Obstacle obstacle = new Obstacle(this, animation, new Vector2(1, 1.5f), new Vector2(Gdx.graphics.getWidth() / PPM, 3), new Vector2(-30, -5));
 				obstacles.add(obstacle);
 			} else {
 				timeUntilNextObstacle -= Gdx.graphics.getDeltaTime();
